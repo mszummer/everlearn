@@ -1,39 +1,57 @@
 # everlearn
 
-This code is for using Generative AI for creating synthetic Anki Flash cards.
-Based on a syllabus (input in the file syllabus.txt), the system automatically generates questions, answers, and images representative of the flash card.
+This software generates revision questions and answers, in the form of
+flashcards, based on a syllabus.  
+In particular it can output the flashcards in the popular
+[Anki](https://apps.ankiweb.net/) format, supported by many
+flashcards apps available on mobile and desktop.
 
-This code was written in a few hours during the 42 London Hackathon. 
+The questions, answers and images are generated automatically using AI
+via LLMs.
+
+The topics of the questions are chosen based on a syllabus that you
+provide as a text file.
+The content comes from within the language model.  By adjusting the
+prompts in the system somewhat, one could make it extract questions from
+content rather than a syllabus specifically. 
+
+# Implementation
+This code was written in a few hours during the 42 Hackathon in
+London, February 2024.  Although usable, this code is rough. See it as
+a demo of what is possibe.
 
 # Requires
-* ANTHROPIC API key - for generating 
-* OPEN API key - for generating images
+* Anthropic API key - for generating questions and answers
+* OpenAI API key - for generating images
 * Anki software for viewing the generated .apkg file.
 
 # Instructions
-Install the Python requirements.
-pip install -r requirements.txt
+Install the Python requirements (best inside a virtual environment).
 
-Supply your API keys in the shell:
+```pip install -r requirements.txt```
 
-export 
-ANHTHROPIC_API_KEY=<YOUR_KEY_HERE_NO_SPACE_AROUND_EQUALS>
+Supply your API keys via shell environment variables.
+
+```export ANHTHROPIC_API_KEY=<YOUR_KEY_HERE_NO_SPACE_AROUND_EQUALS>
+
 export OPENAI_API_KEY=<YOUR_KEY_HERE_NO_SPACE_AROUND_EQUALS>
+```
 
 Supply a syllabus of study topic in the file syllabus.txt
 
 Run the AI generation (takes a few minutes)
 
-python generate_cards.py
+```python generate_cards.py```
 
-Load the output file: geography.apkg into Anki
+This creates an .apkg file with Anki cards;
+Load this into Anki.
 
-# You can also download the geography.apkg file directly from here:
+# Example application: Geography revision
+You can download a sample output file [directly from OneDrive](https://codemaestroai-my.sharepoint.com/:u:/g/personal/szummer_igent_ai/EVc8zoXatehNoTR6wE16TnwBbkWFYSTJJ-tdaOssCj8JlA?e=Ncg6cT).
 
-https://codemaestroai-my.sharepoint.com/:u:/g/personal/szummer_igent_ai/EVc8zoXatehNoTR6wE16TnwBbkWFYSTJJ-tdaOssCj8JlA?e=Ncg6cT
-anki
-
-View the .apkg flashcard deck in your favorite Anki app.  Install here:
-Mac, iOS, Android etc:  https://apps.ankiweb.net/
+View the .apkg flashcard deck in your favorite Anki app.  Install [here](https://apps.ankiweb.net/), for desktop and mobile platforms.
 
 After starting the app, select 'Import' and specify the generated .apkg file.
+
+# Cost of running this
+The costs of creating questions and  is about $0.05 per card, as of early 2024.  The cost is currently dominated by the image generation.
