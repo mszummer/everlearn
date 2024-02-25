@@ -32,12 +32,12 @@ Install the Python requirements (best inside a virtual environment).
 
 Supply your API keys via shell environment variables.
 
-```export ANHTHROPIC_API_KEY=<YOUR_KEY_HERE_NO_SPACE_AROUND_EQUALS>
-
-export OPENAI_API_KEY=<YOUR_KEY_HERE_NO_SPACE_AROUND_EQUALS>
+```
+export ANTHROPIC_API_KEY=YOUR_KEY_HERE
+export OPENAI_API_KEY=YOUR_KEY_HERE
 ```
 
-Supply a syllabus of study topic in the file syllabus.txt
+Supply a syllabus of study topic in the file syllabus.
 
 Run the AI generation (takes a few minutes)
 
