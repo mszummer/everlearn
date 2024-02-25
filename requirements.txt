@@ -1,3 +1,6 @@
 anthropic>=0.16
 openai
+genanki
+requests
+
 
