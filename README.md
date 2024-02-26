@@ -47,7 +47,7 @@ This creates an .apkg file with Anki cards;
 Load this into Anki.
 
 # Example application: Geography revision
-You can download a sample output file [directly from OneDrive](https://codemaestroai-my.sharepoint.com/:u:/g/personal/szummer_igent_ai/EVc8zoXatehNoTR6wE16TnwBbkWFYSTJJ-tdaOssCj8JlA?e=Ncg6cT).
+You can download a sample output file [directly from OneDrive](https://codemaestroai-my.sharepoint.com/:u:/g/personal/szummer_igent_ai/EZaNImB_PFBFrYS7CV_R7LUBtjiuRKrCcxtUISSbudKKug?e=YYEW2N).
 
 View the .apkg flashcard deck in your favorite Anki app.  Install [here](https://apps.ankiweb.net/), for desktop and mobile platforms.
 

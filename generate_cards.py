@@ -6,6 +6,7 @@ import pickle
 from openai import OpenAI
 import genanki
 import requests
+import sys
 
 system_prompt = """You are a very diligent student studying for your AS-level exam. 
 Your level is that of a 17-year old.
@@ -168,11 +169,7 @@ def cards_to_jsonl(cards: list[Card], file_path: str) -> None:
     try:
         # Convert the list of card instances to a list of dictionaries
         cards_dict = [asdict(card) for card in cards]
-        
-        # Convert the list of dictionaries to a JSON string
         json_output = json.dumps(cards_dict, indent=4)
-        
-        # Save the JSON string to the specified file
         with open(file_path, 'w') as f:
             f.write(json_output)
             
@@ -182,13 +179,11 @@ def cards_to_jsonl(cards: list[Card], file_path: str) -> None:
     
 
 def cards_to_anki(card_list, deck_name='Geography', output_file='geography.apkg'):
-    # Create a new Anki deck
     my_deck = genanki.Deck(
         deck_id=22222,  # Ensure this is a unique number
         name=deck_name,
     )
 
-    # Define a model
     my_model = genanki.Model(
         model_id=33333,  # Ensure this is a unique number
         name='Simple Model with Image',
@@ -213,7 +208,6 @@ def cards_to_anki(card_list, deck_name='Geography', output_file='geography.apkg'
 }"""
     )
 
-    # Helper function to possibly download/manage images, dummy for now
     def manage_image(image_url:str, image_name:str) -> None:
         # Here you might want to adjust the path or download the image if it's a URL
         # Send a GET request to the image URL
@@ -225,30 +219,29 @@ def cards_to_anki(card_list, deck_name='Geography', output_file='geography.apkg'
             print(f"Failed to download the image. Status code: {response.status_code}")
 
     # Add cards to the deck
-    image_names=[]    
-    for card in card_list:
-        # Split the URL by '/' and get the last part, then split on ? to get the file name
-        last_part = card.image_url.split('/')[-2]        
-        image_name = last_part.split('?')[0]
+    image_names=[]
+        
+    for ix, card in enumerate(card_list):
+        image_name = f"img-{ix:04d}.png"
+        print(image_name)
         image_names.append(image_name)
 
-        manage_image(card.image_url, image_name)  # Manage the image
-        # my_image = card.image_url
+        manage_image(card.image_url, image_name)
         note = genanki.Note(
             model=my_model,
             fields=[card.question, card.answer, f'<img src="{image_name}">']
         )
         my_deck.add_note(note)
 
-    # Use genanki's method to create a package
     my_package = genanki.Package(my_deck)
     my_package.media_files = image_names
     my_package.write_to_file(output_file)
     print('Saved: ' + output_file)        
 
-def main():
-    print(os.environ.get("ANTHROPIC_API_KEY"))    
-    ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+def main(): 
+    ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+    if ANTHROPIC_API_KEY is None:
+        sys.exit("Error: no ANTHROPIC_API_KEY set in the environment.")
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY) 
     cards = remove_footer_and_process('syllabus.txt', client)
     pickle_cards(cards, "cards.pkl")
@@ -257,7 +250,9 @@ def main():
     # For quick testing purposes, comment the above and uncomment the following two lines
     # cards = unpickle_cards("cards.pkl")  # can start from checkpoint
     # cards = cards[:1]    # for quick test runs
-    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    if OPENAI_API_KEY is None:
+        sys.exit("Error: no OPENAI_API_KEY set in the environment.")
     oai_client = OpenAI(api_key=OPENAI_API_KEY)
     generate_images(cards, oai_client)
     cards_to_anki(cards)
